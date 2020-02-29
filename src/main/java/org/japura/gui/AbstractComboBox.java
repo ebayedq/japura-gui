@@ -5,9 +5,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.MenuKeyEvent;
 import javax.swing.event.MenuKeyListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.LayoutManager;
+import java.awt.*;
 import java.awt.event.*;
 
 /**
@@ -71,9 +69,24 @@ public abstract class AbstractComboBox extends JComponent{
 		  setPopupVisible(false);
 	  }
 	});
+
+	  getComboBox().addKeyListener(new KeyAdapter() {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (isPopupTrigger(e)) {
+				setPopupVisible(true);
+			}
+		}
+	});
   }
 
-  protected abstract JComponent getPopupComponent();
+	private boolean isPopupTrigger(KeyEvent e) {
+		return e.getKeyCode() == KeyEvent.VK_F4 ||
+				(e.getKeyCode() == KeyEvent.VK_DOWN && e.getModifiersEx() == KeyEvent.ALT_DOWN_MASK) ||
+				e.getKeyCode() == KeyEvent.VK_F2;
+	}
+
+	protected abstract JComponent getPopupComponent();
 
   protected final JComboBox getComboBox() {
 	if (comboBox == null) {
@@ -102,7 +115,7 @@ public abstract class AbstractComboBox extends JComponent{
 	return getComboBox().getBackground();
   }
 
-  private WrapperComponent getWrapperComponent() {
+  protected WrapperComponent getWrapperComponent() {
 	if (wrapperComponent == null) {
 	  MouseListener listener = new MouseAdapter() {
 		@Override
@@ -262,6 +275,10 @@ public abstract class AbstractComboBox extends JComponent{
         KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "none");
       getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
         KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), "none");
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK, false), "none");
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK, false), "none");
       for (KeyListener l : getKeyListeners()) {
         removeKeyListener(l);
       }

@@ -4,14 +4,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -120,16 +113,7 @@ public class CheckList extends JList{
 		if (SwingUtilities.isLeftMouseButton(e)) {
 		  int index = locationToIndex(e.getPoint());
 		  if (index > -1) {
-			Object obj = getModel().getElementAt(index);
-			if (getModel().isLocked(obj) == false) {
-			  boolean checked = getModel().isChecked(obj);
-			  if (checked) {
-				getModel().removeCheck(obj);
-			  } else {
-				getModel().addCheck(obj);
-			  }
-			  fireActionListener();
-			}
+			toggleSelection(index);
 		  }
 		} else if (SwingUtilities.isRightMouseButton(e)
 			&& getPopupMenuBuilder() != null) {
@@ -140,9 +124,31 @@ public class CheckList extends JList{
 		}
 	  }
 	});
+
+	addKeyListener(new KeyAdapter() {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_SPACE)  {
+				toggleSelection(getSelectedIndex());
+			}
+		}
+	});
   }
 
-  public void addActionListener(ActionListener l) {
+	private void toggleSelection(int index) {
+		Object obj = getModel().getElementAt(index);
+		if (!getModel().isLocked(obj)) {
+			boolean checked = getModel().isChecked(obj);
+			if (checked) {
+				getModel().removeCheck(obj);
+			} else {
+				getModel().addCheck(obj);
+			}
+			fireActionListener();
+		}
+	}
+
+	public void addActionListener(ActionListener l) {
 	listenerList.add(ActionListener.class, l);
   }
 
