@@ -233,6 +233,26 @@ public abstract class AbstractComboBox extends JComponent{
 	return popup;
   }
 
+	@Override
+	public void setToolTipText(String text) {
+		getWrapperComponent().setToolTipText(text);
+	}
+
+	@Override
+	public String getToolTipText() {
+		return getWrapperComponent().getToolTipText();
+	}
+
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		return getWrapperComponent().getToolTipText(event);
+	}
+
+	@Override
+	public Point getToolTipLocation(MouseEvent event) {
+		return getWrapperComponent().getToolTipLocation(event);
+	}
+
   private class ComboBox extends JComboBox {
 
     private static final long serialVersionUID = 2L;

@@ -4,8 +4,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -66,9 +65,29 @@ class WrapperComponent extends JLayeredPane implements MouseListener{
   @Override
   public Dimension getMaximumSize() {
 	return component.getMaximumSize();
-  }  
+  }
 
-  @Override
+	@Override
+	public void setToolTipText(String text) {
+		filterPanel.setToolTipText(text);
+	}
+
+	@Override
+	public String getToolTipText() {
+		return filterPanel.getToolTipText();
+	}
+
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		return filterPanel.getToolTipText(event);
+	}
+
+	@Override
+	public Point getToolTipLocation(MouseEvent event) {
+		return filterPanel.getToolTipLocation(event);
+	}
+
+	@Override
   public void setEnabled(boolean enabled) {
 	super.setEnabled(enabled);
 	component.setEnabled(enabled);
